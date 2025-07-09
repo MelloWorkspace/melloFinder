@@ -1,7 +1,7 @@
 import type React from "react";
 import { useState } from "react";
-import { LoginForm } from "../../features/auth/ui/LoginForm";
-import { RegisterForm } from "../../features/register/ui/RegisterForm";
+import { LoginForm } from "../../../features/auth/ui/LoginForm";
+import { RegisterForm } from "../../../features/register/ui/RegisterForm";
 
 export const AuthPage: React.FC = () => {
 	const [tab, setTab] = useState<"login" | "register">("login");

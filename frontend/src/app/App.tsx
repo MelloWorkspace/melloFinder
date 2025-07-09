@@ -1,24 +1,15 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { RouterProvider } from "@tanstack/react-router";
 import type { FunctionComponent } from "./types/types";
-import type { TanstackRouter } from "../main";
-import { TanStackRouterDevelopmentTools } from "../shared/utils/development-tools/TanStackRouterDevelopmentTools";
+import { AppRouter } from "./providers/routes/AppRouter";
 
 const queryClient = new QueryClient();
 
-type AppProps = { router: TanstackRouter };
-
-const App = ({ router }: AppProps): FunctionComponent => {
+const App = (): FunctionComponent => {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<RouterProvider router={router} />
-			<TanStackRouterDevelopmentTools
-				initialIsOpen={false}
-				position="bottom-left"
-				router={router}
-			/>
 			<ReactQueryDevtools initialIsOpen={false} position="bottom" />
+			<AppRouter />
 		</QueryClientProvider>
 	);
 };

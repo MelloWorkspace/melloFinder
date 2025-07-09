@@ -10,8 +10,10 @@
 
 // Import Routes
 
-import { Route as rootRoute } from "../routes/__root";
-import { Route as IndexImport } from "../routes/index";
+import { Route as rootRoute } from "./__root";
+import { authRoute } from "./auth";
+import { Route as IndexImport } from "./index";
+import { leadsRoute } from "./leads";
 
 // Create/Update Routes
 
@@ -68,6 +70,7 @@ const rootRouteChildren: RootRouteChildren = {
 };
 
 export const routeTree = rootRoute
+	._addChildren([IndexRoute, authRoute, leadsRoute])
 	._addFileChildren(rootRouteChildren)
 	._addFileTypes<FileRouteTypes>();
 
