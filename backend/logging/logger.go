@@ -12,15 +12,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Logger is a configured logrus.Logger.
 var Logger *logrus.Logger
 
-// StructuredLogger is a structured logrus Logger.
 type StructuredLogger struct {
 	Logger *logrus.Logger
 }
 
-// NewLogger creates and configures a new logrus Logger.
 func NewLogger() *logrus.Logger {
 	Logger = logrus.New()
 	if viper.GetBool("log_textlogging") {
