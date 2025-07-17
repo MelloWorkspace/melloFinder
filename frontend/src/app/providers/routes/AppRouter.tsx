@@ -1,27 +1,29 @@
-// src/app/providers/router/AppRouter.tsx
-import type { FunctionComponent } from "react";
+import { lazy, Suspense, type FunctionComponent } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Leads } from "../../../pages/leads";
-import { AuthPage } from "../../../pages/auth";
+
+// WORKAROUND: IMPORT WITHOUT PUBLIC API BECAUSE LAZY EXPECT DEFAULT IMPORT
+const LeadsLazy = lazy(() => import("../../../pages/leads/ui/Leads"));
+const AuthLazy = lazy(() => import("../../../pages/auth/ui/AuthPage"));
 
 const isAuthenticated = Boolean(localStorage.getItem("token"));
 
 export const AppRouter: FunctionComponent = () => {
 	return (
-		<Routes>
-			{/* Public routes */}
-			<Route element={<AuthPage />} path="/auth" />
-			{/* <Route element={<RegisterPage />} path="/register" /> */}
+		<Suspense fallback={<>Loading chunk...</>}>
+			<Routes>
+				{/* Public routes */}
+				<Route path="/auth" element={<AuthLazy />} />
 
-			{/* Protected routes */}
-			{isAuthenticated ? (
-				<>
-					<Route element={<Leads />} path="/leads" />
-					<Route element={<Navigate to="/leads" />} path="*" />
-				</>
-			) : (
-				<Route element={<Navigate to="/auth" />} path="*" />
-			)}
-		</Routes>
+				{/* Protected routes */}
+				{isAuthenticated ? (
+					<>
+						<Route path="/leads" element={<LeadsLazy />} />
+						<Route path="*" element={<Navigate to="/leads" />} />
+					</>
+				) : (
+					<Route path="*" element={<Navigate to="/auth" />} />
+				)}
+			</Routes>
+		</Suspense>
 	);
 };
