@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import type { LoginParams as LoginParameters } from "../api/authApi";
-import { AuthApi } from "../api/authApi";
+import { type LoginParameters, AuthApi } from "../api/authApi";
+import { isAxiosError } from "axios";
 
 interface AuthState {
 	loading: boolean;
@@ -16,10 +16,15 @@ export const useAuthStore = create<AuthState>((set) => ({
 		try {
 			await AuthApi.login(parameters);
 			set({ loading: false });
-		} catch (e: any) {
+		} catch (e: unknown) {
+			let error: string = "Ошибка входа";
+			if (isAxiosError<{ message?: string }>(e)) {
+				error = e.response?.data?.message ?? error;
+			}
+
 			set({
 				loading: false,
-				error: e?.response?.data?.message || "Ошибка входа",
+				error,
 			});
 		}
 	},

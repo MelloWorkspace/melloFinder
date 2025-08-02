@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import cn from "classnames";
 
-import styles from "./navbar.module.scss";
+import styles from "./Navbar.module.scss";
 
 export const Navbar: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +10,7 @@ export const Navbar: React.FC = () => {
 	return (
 		<header className={styles.navbar}>
 			<div className={styles.container}>
-				<Link to="/" className={styles.logo}>
+				<Link className={styles.logo} to="/">
 					Mello
 				</Link>
 
@@ -22,9 +22,11 @@ export const Navbar: React.FC = () => {
 				</nav>
 
 				<button
-					className={styles.burger}
-					onClick={() => setIsOpen(!isOpen)}
 					aria-label="Toggle menu"
+					className={styles.burger}
+					onClick={() => {
+						setIsOpen(!isOpen);
+					}}
 				>
 					<span className={styles.bar}></span>
 					<span className={styles.bar}></span>

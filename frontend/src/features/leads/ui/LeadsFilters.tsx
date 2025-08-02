@@ -53,7 +53,7 @@ export const LeadsFilters: React.FC = () => {
 		<div className={styles.filtersContainer}>
 			<div className={styles.filtersHeader}>
 				<div className={styles.headerLeft}>
-					<svg className={styles.filterIcon} viewBox="0 0 24 24" fill="none">
+					<svg className={styles.filterIcon} fill="none" viewBox="0 0 24 24">
 						<path
 							d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"
 							stroke="currentColor"
@@ -73,12 +73,14 @@ export const LeadsFilters: React.FC = () => {
 				</div>
 				<button
 					className={styles.expandButton}
-					onClick={() => setIsExpanded(!isExpanded)}
+					onClick={() => {
+						setIsExpanded(!isExpanded);
+					}}
 				>
 					<svg
 						className={`${styles.expandIcon} ${isExpanded ? styles.expanded : ""}`}
-						viewBox="0 0 24 24"
 						fill="none"
+						viewBox="0 0 24 24"
 					>
 						<path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" />
 					</svg>
@@ -93,7 +95,7 @@ export const LeadsFilters: React.FC = () => {
 					<div className={styles.inputGroup}>
 						<label className={styles.label}>Имя</label>
 						<div className={styles.inputWrapper}>
-							<svg className={styles.inputIcon} viewBox="0 0 24 24" fill="none">
+							<svg className={styles.inputIcon} fill="none" viewBox="0 0 24 24">
 								<path
 									d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
 									stroke="currentColor"
@@ -121,7 +123,7 @@ export const LeadsFilters: React.FC = () => {
 					<div className={styles.inputGroup}>
 						<label className={styles.label}>Email</label>
 						<div className={styles.inputWrapper}>
-							<svg className={styles.inputIcon} viewBox="0 0 24 24" fill="none">
+							<svg className={styles.inputIcon} fill="none" viewBox="0 0 24 24">
 								<path
 									d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
 									stroke="currentColor"
@@ -147,7 +149,7 @@ export const LeadsFilters: React.FC = () => {
 					<div className={styles.inputGroup}>
 						<label className={styles.label}>Статус</label>
 						<div className={styles.selectWrapper}>
-							<svg className={styles.inputIcon} viewBox="0 0 24 24" fill="none">
+							<svg className={styles.inputIcon} fill="none" viewBox="0 0 24 24">
 								<path
 									d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
 									stroke="currentColor"
@@ -169,8 +171,8 @@ export const LeadsFilters: React.FC = () => {
 							</select>
 							<svg
 								className={styles.selectArrow}
-								viewBox="0 0 24 24"
 								fill="none"
+								viewBox="0 0 24 24"
 							>
 								<path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" />
 							</svg>
@@ -180,32 +182,32 @@ export const LeadsFilters: React.FC = () => {
 					<div className={styles.inputGroup}>
 						<label className={styles.label}>Компания</label>
 						<div className={styles.inputWrapper}>
-							<svg className={styles.inputIcon} viewBox="0 0 24 24" fill="none">
+							<svg className={styles.inputIcon} fill="none" viewBox="0 0 24 24">
 								<rect
-									x="2"
-									y="3"
-									width="20"
 									height="14"
 									rx="2"
 									ry="2"
 									stroke="currentColor"
 									strokeWidth="2"
+									width="20"
+									x="2"
+									y="3"
 								/>
 								<line
+									stroke="currentColor"
+									strokeWidth="2"
 									x1="8"
-									y1="21"
 									x2="16"
+									y1="21"
 									y2="21"
-									stroke="currentColor"
-									strokeWidth="2"
 								/>
 								<line
-									x1="12"
-									y1="17"
-									x2="12"
-									y2="21"
 									stroke="currentColor"
 									strokeWidth="2"
+									x1="12"
+									x2="12"
+									y1="17"
+									y2="21"
 								/>
 							</svg>
 							<input
@@ -222,7 +224,7 @@ export const LeadsFilters: React.FC = () => {
 					<div className={styles.inputGroup}>
 						<label className={styles.label}>Телефон</label>
 						<div className={styles.inputWrapper}>
-							<svg className={styles.inputIcon} viewBox="0 0 24 24" fill="none">
+							<svg className={styles.inputIcon} fill="none" viewBox="0 0 24 24">
 								<path
 									d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
 									stroke="currentColor"
@@ -243,19 +245,19 @@ export const LeadsFilters: React.FC = () => {
 					<div className={styles.inputGroup}>
 						<label className={styles.label}>Теги</label>
 						<div className={styles.inputWrapper}>
-							<svg className={styles.inputIcon} viewBox="0 0 24 24" fill="none">
+							<svg className={styles.inputIcon} fill="none" viewBox="0 0 24 24">
 								<path
 									d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"
 									stroke="currentColor"
 									strokeWidth="2"
 								/>
 								<line
-									x1="7"
-									y1="7"
-									x2="7.01"
-									y2="7"
 									stroke="currentColor"
 									strokeWidth="2"
+									x1="7"
+									x2="7.01"
+									y1="7"
+									y2="7"
 								/>
 							</svg>
 							<input
@@ -272,40 +274,40 @@ export const LeadsFilters: React.FC = () => {
 					<div className={styles.inputGroup}>
 						<label className={styles.label}>Дата создания от</label>
 						<div className={styles.inputWrapper}>
-							<svg className={styles.inputIcon} viewBox="0 0 24 24" fill="none">
+							<svg className={styles.inputIcon} fill="none" viewBox="0 0 24 24">
 								<rect
-									x="3"
-									y="4"
-									width="18"
 									height="18"
 									rx="2"
 									ry="2"
 									stroke="currentColor"
 									strokeWidth="2"
+									width="18"
+									x="3"
+									y="4"
 								/>
 								<line
+									stroke="currentColor"
+									strokeWidth="2"
 									x1="16"
-									y1="2"
 									x2="16"
-									y2="6"
-									stroke="currentColor"
-									strokeWidth="2"
-								/>
-								<line
-									x1="8"
 									y1="2"
-									x2="8"
 									y2="6"
-									stroke="currentColor"
-									strokeWidth="2"
 								/>
 								<line
-									x1="3"
-									y1="10"
-									x2="21"
-									y2="10"
 									stroke="currentColor"
 									strokeWidth="2"
+									x1="8"
+									x2="8"
+									y1="2"
+									y2="6"
+								/>
+								<line
+									stroke="currentColor"
+									strokeWidth="2"
+									x1="3"
+									x2="21"
+									y1="10"
+									y2="10"
 								/>
 							</svg>
 							<input
@@ -321,40 +323,40 @@ export const LeadsFilters: React.FC = () => {
 					<div className={styles.inputGroup}>
 						<label className={styles.label}>Дата создания до</label>
 						<div className={styles.inputWrapper}>
-							<svg className={styles.inputIcon} viewBox="0 0 24 24" fill="none">
+							<svg className={styles.inputIcon} fill="none" viewBox="0 0 24 24">
 								<rect
-									x="3"
-									y="4"
-									width="18"
 									height="18"
 									rx="2"
 									ry="2"
 									stroke="currentColor"
 									strokeWidth="2"
+									width="18"
+									x="3"
+									y="4"
 								/>
 								<line
+									stroke="currentColor"
+									strokeWidth="2"
 									x1="16"
-									y1="2"
 									x2="16"
-									y2="6"
-									stroke="currentColor"
-									strokeWidth="2"
-								/>
-								<line
-									x1="8"
 									y1="2"
-									x2="8"
 									y2="6"
-									stroke="currentColor"
-									strokeWidth="2"
 								/>
 								<line
-									x1="3"
-									y1="10"
-									x2="21"
-									y2="10"
 									stroke="currentColor"
 									strokeWidth="2"
+									x1="8"
+									x2="8"
+									y1="2"
+									y2="6"
+								/>
+								<line
+									stroke="currentColor"
+									strokeWidth="2"
+									x1="3"
+									x2="21"
+									y1="10"
+									y2="10"
 								/>
 							</svg>
 							<input
@@ -373,7 +375,7 @@ export const LeadsFilters: React.FC = () => {
 						className={`${styles.btn} ${styles.primary}`}
 						onClick={handleApply}
 					>
-						<svg className={styles.btnIcon} viewBox="0 0 24 24" fill="none">
+						<svg className={styles.btnIcon} fill="none" viewBox="0 0 24 24">
 							<path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" />
 						</svg>
 						Применить фильтры
@@ -382,7 +384,7 @@ export const LeadsFilters: React.FC = () => {
 						className={`${styles.btn} ${styles.secondary}`}
 						onClick={handleReset}
 					>
-						<svg className={styles.btnIcon} viewBox="0 0 24 24" fill="none">
+						<svg className={styles.btnIcon} fill="none" viewBox="0 0 24 24">
 							<path
 								d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
 								stroke="currentColor"

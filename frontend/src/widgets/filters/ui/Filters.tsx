@@ -1,13 +1,13 @@
-import React from "react";
+import type React from "react";
 import { useLeadsStore } from "../../../features/leads";
 import { LeadsFilters } from "../../../features/leads/ui/LeadsFilters"; // FIXME
-import styles from "./filters.module.scss";
+import styles from "./Filters.module.scss";
 
-interface filterProps {
-	classses?: string;
+interface Props {
+	className?: string;
 }
 
-export const Filters: React.FC<filterProps> = ({ classses }) => {
+export const Filters: React.FC<Props> = () => {
 	const { leads, loading, error, page, pageSize, setPage, fetchLeads } =
 		useLeadsStore();
 
@@ -25,12 +25,13 @@ export const Filters: React.FC<filterProps> = ({ classses }) => {
 		}
 	};
 
-	const getStatusBadge = (status: string) => {
-		const statusClasses = {
+	const getStatusBadge = (status: string): string | undefined => {
+		const statusClasses: Record<string, string | undefined> = {
 			active: styles.statusActive,
 			pending: styles.statusPending,
 			inactive: styles.statusInactive,
 		};
+
 		return statusClasses[status.toLowerCase()] || styles.statusDefault;
 	};
 
@@ -59,7 +60,7 @@ export const Filters: React.FC<filterProps> = ({ classses }) => {
 
 			{error && (
 				<div className={styles.errorContainer}>
-					<svg className={styles.errorIcon} viewBox="0 0 24 24" fill="none">
+					<svg className={styles.errorIcon} fill="none" viewBox="0 0 24 24">
 						<circle
 							cx="12"
 							cy="12"
@@ -68,20 +69,20 @@ export const Filters: React.FC<filterProps> = ({ classses }) => {
 							strokeWidth="2"
 						/>
 						<line
-							x1="15"
-							y1="9"
-							x2="9"
-							y2="15"
 							stroke="currentColor"
 							strokeWidth="2"
+							x1="15"
+							x2="9"
+							y1="9"
+							y2="15"
 						/>
 						<line
-							x1="9"
-							y1="9"
-							x2="15"
-							y2="15"
 							stroke="currentColor"
 							strokeWidth="2"
+							x1="9"
+							x2="15"
+							y1="9"
+							y2="15"
 						/>
 					</svg>
 					<span>{error}</span>
@@ -134,12 +135,12 @@ export const Filters: React.FC<filterProps> = ({ classses }) => {
 						<tbody>
 							{leads.length === 0 ? (
 								<tr>
-									<td colSpan={7} className={styles.emptyState}>
+									<td className={styles.emptyState} colSpan={7}>
 										<div className={styles.emptyContent}>
 											<svg
 												className={styles.emptyIcon}
-												viewBox="0 0 24 24"
 												fill="none"
+												viewBox="0 0 24 24"
 											>
 												<path
 													d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
@@ -153,7 +154,7 @@ export const Filters: React.FC<filterProps> = ({ classses }) => {
 									</td>
 								</tr>
 							) : (
-								leads.map((lead, index) => (
+								leads.map((lead) => (
 									<tr key={lead.id} className={styles.tableRow}>
 										<td className={styles.nameCell}>
 											<div className={styles.avatar}>
@@ -197,7 +198,7 @@ export const Filters: React.FC<filterProps> = ({ classses }) => {
 						disabled={page === 1}
 						onClick={handlePrevious}
 					>
-						<svg className={styles.btnIcon} viewBox="0 0 24 24" fill="none">
+						<svg className={styles.btnIcon} fill="none" viewBox="0 0 24 24">
 							<path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" />
 						</svg>
 						Назад
@@ -215,7 +216,7 @@ export const Filters: React.FC<filterProps> = ({ classses }) => {
 						onClick={handleNext}
 					>
 						Вперёд
-						<svg className={styles.btnIcon} viewBox="0 0 24 24" fill="none">
+						<svg className={styles.btnIcon} fill="none" viewBox="0 0 24 24">
 							<path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" />
 						</svg>
 					</button>

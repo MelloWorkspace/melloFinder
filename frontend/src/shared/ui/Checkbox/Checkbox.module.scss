@@ -1,0 +1,43 @@
+$CHECKBOX-BORDER-RADIUS: 4px;
+
+.checkbox{
+  border-radius: $CHECKBOX-BORDER-RADIUS;
+  color: transparent !important;
+
+  &::before{
+    content: '';
+    position: absolute;
+    box-sizing: border-box;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--focus-border-color);
+    border-radius: $CHECKBOX-BORDER-RADIUS;
+  }
+}
+
+.checked {
+  color: var(--focus-border-color) !important;
+
+  &::before{
+    background-color: var(--secondary-color) !important;
+  }
+}
+
+.icon{
+  width: 24px;
+  height: 24px;
+
+  & svg{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.disabled{
+  &::before{
+    background-color: var(--disabled-background-color);
+    border-color: var(--disabled-color) !important;
+  }
+}

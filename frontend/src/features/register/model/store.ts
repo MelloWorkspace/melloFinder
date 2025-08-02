@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import type { RegisterParams as RegisterParameters } from "../api/registerApi";
-import { RegisterApi } from "../api/registerApi";
+import { type RegisterParameters, RegisterApi } from "../api/registerApi";
+import { isAxiosError } from "axios";
 
 interface RegisterState {
 	loading: boolean;
@@ -16,10 +16,15 @@ export const useRegisterStore = create<RegisterState>((set) => ({
 		try {
 			await RegisterApi.register(parameters);
 			set({ loading: false });
-		} catch (e: any) {
+		} catch (e: unknown) {
+			let error: string = "Ошибка входа";
+			if (isAxiosError<{ message?: string }>(e)) {
+				error = e.response?.data?.message ?? error;
+			}
+
 			set({
 				loading: false,
-				error: e?.response?.data?.message || "Ошибка регистрации",
+				error,
 			});
 		}
 	},

@@ -1,0 +1,44 @@
+.h1,
+.h2,
+.h3,
+.h4,
+.text,
+.subText,
+.caption,
+.label {
+	line-height: 1.2;
+	color: var(--inverted-primary-color);
+}
+
+.h1 {
+	font-size: 24px;
+}
+
+.h2 {
+	font-size: 20px;
+}
+
+.h3 {
+	font-size: 16px;
+}
+
+.h4 {
+	font-size: 14px;
+}
+
+.text {
+	font-size: 16px;
+}
+
+.subText {
+	font-size: 14px;
+}
+
+.caption {
+	font-size: 12px;
+}
+
+.label {
+	font-size: 12px;
+	font-weight: bold;
+}

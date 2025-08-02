@@ -1,0 +1,18 @@
+.app-default-theme {
+	--accent-color: #a60000;
+	--primary-color: #ffffff;
+	--primary-color-80: rgba(255, 255, 255, 0.8);
+	--inverted-primary-color: #191919;
+	--secondary-color: #4c6fff;
+	--placeholder-color: #a3a3a3;
+	--border-color: #d0d0d0;
+	--error-color: #fceae9;
+	--error-placeholder-color: #d92d20;
+	--error-border-color: var(--error-placeholder-color);
+	--disabled-color: #f0f0f0;
+	--disabled-background-color: #f4f4f5
+	--disabled-placeholder-color: #999999;
+	--focus-border-color: #3e57e1;
+	--sidebar-background-color: #ececec;
+	--sidebar-shadow-color: rgba(26, 26, 26, 0.1);
+}
