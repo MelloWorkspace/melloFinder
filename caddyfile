@@ -1,0 +1,111 @@
+# Main domain with frontend
+nnnnn.net, www.nnnnn.net {
+	encode gzip
+	log
+
+	# Security headers
+	header {
+		-Server
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		X-XSS-Protection "1; mode=block"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	# Robots.txt
+	handle /robots.txt {
+		header Content-Type text/plain
+		respond "User-agent: *\nAllow: /" 200
+	}
+
+	# Proxy Portainer interface at /portainer
+	handle_path /portainer* {
+		reverse_proxy portainer:9000 {
+			# health_uri /api/system/status
+			# health_interval 30s
+			# health_timeout 10s
+		}
+	}
+
+	# Proxy API requests to backend
+	handle_path /api* {
+		reverse_proxy backend:8081 {
+			# health_uri /api/health
+			# health_interval 10s
+			# health_timeout 5s
+		}
+	}
+
+	# Proxy WebSocket requests
+	handle_path /socket.io* {
+		reverse_proxy backend:8081 {
+			header_up Connection {>Connection}
+			header_up Upgrade {>Upgrade}
+		}
+	}
+
+	# Frontend (должно быть последним)
+	handle {
+		reverse_proxy frontend:5173 {
+			# Простой health check для frontend
+			health_uri /
+			health_interval 10s
+			health_timeout 5s
+		}
+	}
+}
+
+# API subdomain
+api.nnnnn.net {
+	encode gzip
+	log
+
+	header {
+		-Server
+		X-Content-Type-Options nosniff
+	}
+
+	reverse_proxy backend:8081 {
+		# Убираем health check пока не исправим backend
+	}
+}
+
+# Portainer subdomain
+portainer.nnnnn.net {
+	encode gzip
+	log
+
+	header {
+		-Server
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+	}
+
+	reverse_proxy portainer:9000 {
+		# Portainer health check
+		# health_uri /api/system/status
+		# health_interval 30s
+		# health_timeout 10s
+	}
+}
+
+# WebSocket subdomain
+ws.nnnnn.net {
+	encode gzip
+	log
+
+	header {
+		-Server
+		X-Content-Type-Options nosniff
+	}
+
+	reverse_proxy backend:1337 {
+		header_up Connection {>Connection}
+		header_up Upgrade {>Upgrade}
+	}
+}
+
+# Redirect HTTP to HTTPS
+http://nnnnn.net, http://www.nnnnn.net, http://api.nnnnn.net, http://portainer.nnnnn.net, http://ws.nnnnn.net {
+	redir https://{host}{uri}
+}
