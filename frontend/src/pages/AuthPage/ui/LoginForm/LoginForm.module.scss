@@ -7,3 +7,30 @@
 .password {
 	background-color: var(--primary-color);
 }
+
+.title, .password, .email{
+	margin-bottom: 32px;
+}
+
+.register{
+	margin-bottom: 16px;
+}
+
+.link{
+	color: inherit;
+	font-size: 12px;
+}
+
+.link:first-child{
+	width: 100%;
+	margin-bottom: 16px;
+}
+
+.text{
+	color: var(--placeholder-color);
+}
+
+.additionalInfo{
+	display: flex;
+	flex-wrap: wrap;
+}

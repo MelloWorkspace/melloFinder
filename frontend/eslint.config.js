@@ -8,6 +8,7 @@ import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
 import eslintPluginReact from "eslint-plugin-react";
 import eslintPluginReactHooks from "eslint-plugin-react-hooks";
 import eslintPluginReactRefresh from "eslint-plugin-react-refresh";
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import globals from "globals";
 import typescriptEslint from "typescript-eslint";
@@ -34,6 +35,12 @@ const baseESLintConfig = {
 
 		camelcase: "error",
 	},
+	plugins: {
+		"prettier/prettier": prettierRecommended
+	},
+	rules: {
+		"prettier/prettier": ["error", { endOfLine: "auto"}]
+	}
 };
 
 const typescriptConfig = {
@@ -192,7 +199,8 @@ const eslintConfig = typescriptEslint.config(
 	eslintConfigPrettier,
 	reactConfig,
 	jsxA11yConfig,
-	unicornConfig
+	unicornConfig,
+	prettierRecommended
 );
 
 eslintConfig.map((config) => {

@@ -1,10 +1,12 @@
 import type { FC } from "react";
+import { Link } from "react-router-dom";
 
 import styles from "./SignUpForm.module.scss";
-import { Input } from "../../../../shared/ui/Input/Input";
-import { Button } from "../../../../shared/ui/Button/Button";
-import { Checkbox } from "../../../../shared/ui/Checkbox/Checkbox";
+import { Input, Button, Checkbox, Typography } from "../../../../shared/ui";
 import { FormControlLabel } from "@mui/material";
+import { getLoginPageRoute } from "../../../../shared/constants";
+
+
 
 interface Props {
 	className?: string;
@@ -13,17 +15,24 @@ interface Props {
 export const SignUpForm: FC<Props> = ({ className }) => (
 	<div className={className}>
 		<h1 className={styles.title}>Регистрация</h1>
-		<Input placeholder="E-mail" />
-		<Input placeholder="Телефон" />
-		<Input placeholder="Имя пользователя" />
-		<Input placeholder="Придумайте пароль" type="password" />
+		<Input className={styles.email} placeholder="E-mail" />
+		<Input className={styles.phone} placeholder="Телефон" />
+		<Input className={styles.name} placeholder="Имя пользователя" />
+		<Input className={styles.password} placeholder="Придумайте пароль" type="password" />
 		<FormControlLabel
+			className={styles.checkbox}
 			control={<Checkbox />}
 			label="Я согласен с политикой конфиденциальности и правилами использования персональных данных"
 		/>
-		<Button>Зарегистрироваться</Button>
-		{/* <span>Забыли пароль</span>
-    <span>Ещё нет аккаунта?</span>
-    <span>Зарегистрируйтесь</span> */}
+		<Button className={styles.registerBtn}>Зарегистрироваться</Button>
+		<div className={styles.additionalInfo}>
+			<Typography.Caption className={styles.text}>
+				Уже зарегистрированы?
+			</Typography.Caption>
+			{'\u00A0'}
+			<Link className={styles.link} to={getLoginPageRoute()}>
+				Войдите в профиль
+			</Link>
+		</div>
 	</div>
 );

@@ -1,0 +1,26 @@
+.title, .email, .phone, .name, .password, .checkbox{
+  margin-bottom: 32px;
+}
+
+.registerBtn{
+  margin-bottom: 16px;
+}
+
+.link{
+	color: inherit;
+	font-size: 12px;
+}
+
+.link:first-child{
+	width: 100%;
+	margin-bottom: 16px;
+}
+
+.text{
+	color: var(--placeholder-color);
+}
+
+.additionalInfo{
+	display: flex;
+	flex-wrap: wrap;
+}
