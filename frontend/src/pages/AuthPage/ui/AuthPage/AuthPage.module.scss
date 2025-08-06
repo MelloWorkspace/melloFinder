@@ -1,8 +1,9 @@
 .wrap {
 	width: 100%;
 	height: 100vh;
-	background:   linear-gradient(rgba(133, 0, 0, 0.74), rgba(133, 0, 0, 0.74)), url('../../../../shared/assets/images/AuthBackground.jpg') center/cover;
-	
+	background:
+		linear-gradient(rgba(133, 0, 0, 0.74), rgba(133, 0, 0, 0.74)),
+		url("../../../../shared/assets/images/AuthBackground.jpg") center/cover;
 }
 
 .main {
@@ -12,10 +13,11 @@
 	max-width: 1592px;
 	display: flex;
 	align-items: center;
+	justify-content: space-evenly;
 }
 
 .authCard {
-	max-width: 772px;
+	max-width: 500px;
 	width: 100%;
 	border-radius: 16px;
 	padding: 32px;
@@ -26,29 +28,28 @@
 	margin-right: 191px;
 }
 
-.logo{
+.logo {
 	display: inline-block;
 	margin-bottom: 32px;
 
-	& svg{
+	& svg {
 		width: 486px;
 		height: 85px;
 		fill: var(--primary-color);
 
-		& path{
-			fill: var(--primary-color)
+		& path {
+			fill: var(--primary-color);
 		}
 	}
-	
 }
 
-.line{
+.line {
 	height: 4px;
 	background-color: var(--primary-color);
 	margin-bottom: 32px;
 }
 
-.description{
+.description {
 	display: inline-block;
 	color: var(--primary-color);
 	text-align: center;

@@ -1,9 +1,23 @@
-FROM nginx:stable-alpine
+# Стейдж для сборки
+FROM node:22-alpine as build
 
 WORKDIR /app
 
+COPY package*.json ./ 
+
+# FIXME Устанавливаем зависимости (легаси депенденсы из-за 19го реакта)
+RUN npm install --legacy-peer-deps
+
 COPY . .
 
-RUN cp -r /app/dist/* /usr/share/nginx/html
+RUN npm run build 
 
-EXPOSE 80
+FROM nginx:stable-alpine
+
+COPY --from=build /app/dist /usr/share/nginx/html
+
+COPY --from=build /app/nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 5173
+
+CMD ["nginx", "-g", "daemon off;"]

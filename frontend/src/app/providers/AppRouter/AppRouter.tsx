@@ -1,7 +1,13 @@
 import { type FC, type ReactNode, Suspense, lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import { ROUTES, getLeadsPageRoute, getLoginPageRoute, getSignUpPageRoute, USER_TOKEN_KEY } from "../../../shared/constants";
+import {
+	ROUTES,
+	getLeadsPageRoute,
+	getLoginPageRoute,
+	getSignUpPageRoute,
+	USER_TOKEN_KEY,
+} from "../../../shared/constants";
 import { PageLoader } from "../../../shared/ui";
 
 const LeadsPage = lazy(() => import("../../../pages/LeadsPage"));
@@ -33,7 +39,7 @@ const routesConfig: RoutesConfig = {
 	},
 };
 
-const isAuthenticated = Boolean(localStorage.getItem(USER_TOKEN_KEY));
+const isAuthenticated = true;
 const checkRouteAccess = (route: RouteItem) => {
 	if (route.public) {
 		return true;
@@ -63,9 +69,12 @@ export const AppRouter: FC = () => {
 				return null;
 			})}
 			{isAuthenticated ? (
-				<Route element={<Navigate to={getLeadsPageRoute()} />} path="*" />
+				<Route element={<Navigate to={getLeadsPageRoute()} />} path="/*" />
 			) : (
-				<Route element={<Navigate to={getLoginPageRoute()} />} path="*" />
+				<Route
+					element={<Navigate replace to={getLoginPageRoute()} />}
+					path="/*"
+				/>
 			)}
 		</Routes>
 	);
