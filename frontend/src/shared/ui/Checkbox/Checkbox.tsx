@@ -1,8 +1,8 @@
-import { memo, useState, type FC } from "react";
-import { Checkbox as MCheckbox, type CheckboxProps } from "@mui/material";
-import Check from "../../assets/icons/Check.svg";
-
+import { type CheckboxProps, Checkbox as MCheckbox } from "@mui/material";
 import cn from "classnames";
+import { type FC, memo, useState } from "react";
+
+import Check from "../../assets/icons/Check.svg";
 
 import styles from "./Checkbox.module.scss";
 

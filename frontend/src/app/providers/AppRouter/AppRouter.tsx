@@ -6,7 +6,6 @@ import {
 	getLeadsPageRoute,
 	getLoginPageRoute,
 	getSignUpPageRoute,
-	USER_TOKEN_KEY,
 } from "../../../shared/constants";
 import { PageLoader } from "../../../shared/ui";
 

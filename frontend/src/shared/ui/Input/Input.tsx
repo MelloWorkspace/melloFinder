@@ -1,6 +1,13 @@
 import { type InputProps, Input as MInput } from "@mui/material";
-import { memo, useCallback, useState, type FC, type ChangeEvent, type ReactNode } from "react";
 import cn from "classnames";
+import {
+	type ChangeEvent,
+	type FC,
+	type ReactNode,
+	memo,
+	useCallback,
+	useState,
+} from "react";
 
 import styles from "./Input.module.scss";
 
@@ -35,17 +42,17 @@ export const Input: FC<Props> = memo(
 
 		return (
 			<>
-			<MInput
-				className={cn(styles.input, className, {
-					[styles.focus as string]: focused,
-					[styles.error as string]: error,
-				})}
-				onBlur={handleBlur}
-				onChange={handleChange}
-				onFocus={handleFocus}
-				{...otherProps}
-			/>
-			{hint}
+				<MInput
+					className={cn(styles.input, className, {
+						[styles.focus as string]: focused,
+						[styles.error as string]: error,
+					})}
+					onBlur={handleBlur}
+					onChange={handleChange}
+					onFocus={handleFocus}
+					{...otherProps}
+				/>
+				{hint}
 			</>
 		);
 	}

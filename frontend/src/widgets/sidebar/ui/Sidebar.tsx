@@ -1,10 +1,10 @@
-import type { ReactNode } from "react";
 import cn from "classnames";
+import type { ReactNode } from "react";
 
-import styles from "./Sidebar.module.scss";
+import { ExportIcon, HomeIcon, TrashIcon } from "../../../shared/assets";
 import { Icon, Typography } from "../../../shared/ui";
 
-import { HomeIcon, ExportIcon, TrashIcon } from "../../../shared/assets";
+import styles from "./Sidebar.module.scss";
 
 interface SidebarProps {
 	classes?: string;

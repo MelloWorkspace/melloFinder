@@ -1,6 +1,8 @@
 import { useState } from "react";
+
 import { useLeadsStore } from "../model/store";
 import type { LeadStatus } from "../types";
+
 import styles from "./leads-filter.module.scss";
 
 const statusOptions: Array<{ value: LeadStatus; label: string }> = [

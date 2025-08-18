@@ -2,7 +2,7 @@
 	width: 100%;
 	height: 100vh;
 	background:
-		linear-gradient(rgba(133, 0, 0, 0.74), rgba(133, 0, 0, 0.74)),
+		linear-gradient(var(--accent-color-74), var(--accent-color-74)),
 		url("../../../../shared/assets/images/AuthBackground.jpg") center/cover;
 }
 
@@ -10,22 +10,22 @@
 	margin: 0px auto;
 	height: 100%;
 	min-height: 100%;
+	padding: 32px;
 	max-width: 1592px;
 	display: flex;
 	align-items: center;
-	justify-content: space-evenly;
+	justify-content: space-between;
+	gap: 32px;
 }
 
 .authCard {
-	max-width: 500px;
+	max-width: 600px;
 	width: 100%;
 	border-radius: 16px;
 	padding: 32px;
 	background-color: var(--primary-color-80);
-	// background-color: var(--primary-color);
 	display: flex;
 	flex-direction: column;
-	margin-right: 191px;
 }
 
 .logo {

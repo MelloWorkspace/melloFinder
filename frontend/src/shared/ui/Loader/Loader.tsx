@@ -1,6 +1,6 @@
-import { type CircularProgressProps, CircularProgress } from "@mui/material";
-import {type FC, memo } from "react";
+import { CircularProgress, type CircularProgressProps } from "@mui/material";
 import cn from "classnames";
+import { type FC, memo } from "react";
 
 import styles from "./Loader.module.scss";
 
@@ -10,21 +10,18 @@ interface Props extends CircularProgressProps {
 	className?: string;
 }
 
-export const Loader: FC<Props> = memo(({
-	full,
-	className,
-	fullClassName,
-	...otherProps
-}) => {
-	const LoadingSpin = (
-		<CircularProgress
-			className={cn(styles.loader, className)}
-			{...otherProps}
-		/>
-	);
-	return full ? (
-		<div className={cn(styles.full, fullClassName)}>{LoadingSpin}</div>
-	) : (
-		LoadingSpin
-	);
-});
+export const Loader: FC<Props> = memo(
+	({ full, className, fullClassName, ...otherProps }) => {
+		const LoadingSpin = (
+			<CircularProgress
+				className={cn(styles.loader, className)}
+				{...otherProps}
+			/>
+		);
+		return full ? (
+			<div className={cn(styles.full, fullClassName)}>{LoadingSpin}</div>
+		) : (
+			LoadingSpin
+		);
+	}
+);

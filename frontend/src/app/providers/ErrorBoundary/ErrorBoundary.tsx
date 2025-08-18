@@ -3,6 +3,7 @@ import React, { type ErrorInfo, type ReactNode, Suspense } from "react";
 import { withTranslation } from "react-i18next";
 
 import ErrorPage from "../../../pages/ErrorPage";
+import { PageLoader } from "../../../shared/ui";
 
 interface ErrorBoundaryProps {
 	children: ReactNode;
@@ -36,7 +37,7 @@ class ErrorBoundary extends React.Component<
 
 		if (hasError) {
 			return (
-				<Suspense fallback={<>Loading chunk...</>}>
+				<Suspense fallback={<PageLoader />}>
 					<ErrorPage error={error} />
 				</Suspense>
 			);

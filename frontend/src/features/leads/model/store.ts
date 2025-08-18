@@ -1,4 +1,5 @@
 import { create } from "zustand";
+
 import type { Lead, LeadFilter } from "../types";
 
 interface LeadsState {

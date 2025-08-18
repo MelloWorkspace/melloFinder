@@ -1,4 +1,5 @@
-import { memo, type FC } from "react";
+import { type FC, memo } from "react";
+
 import { Loader } from "../Loader/Loader";
 
 import styles from "./PageLoader.module.scss";

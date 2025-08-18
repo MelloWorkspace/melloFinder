@@ -16,7 +16,24 @@ const prettierConfig = {
 	htmlWhitespaceSensitivity: "css",
 	endOfLine: "lf",
 	embeddedLanguageFormatting: "auto",
-	singleAttributePerLine: false
+	singleAttributePerLine: false,
+	plugins: ['@trivago/prettier-plugin-sort-imports'],
+  importOrder: [
+    '^@?\\w',
+
+    // '^@/app/(.*)$',
+    // '^@/pages/(.*)$',
+    // '^@/widgets/(.*)$',
+    // '^@/features/(.*)$',
+    // '^@/entities/(.*)$',
+    // '^@/shared/(.*)$',
+
+    '^[./](?!.*\\.(css|scss|less)$)',
+
+    '^.+\\.module\\.(css|scss|less)$',
+  ],
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
 }
 
 export default prettierConfig

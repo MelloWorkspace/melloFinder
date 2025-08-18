@@ -1,10 +1,9 @@
 import type { FC } from "react";
 
-import { Filters } from "../../../../widgets/Filters";
-import { Sidebar } from "../../../../widgets/Sidebar";
-import { Header } from "../../../../widgets/Header";
-
 import { MainLayout } from "../../../../shared/ui";
+import { Filters } from "../../../../widgets/Filters";
+import { Header } from "../../../../widgets/Header";
+import { Sidebar } from "../../../../widgets/Sidebar";
 
 const Leads: FC = () => {
 	return (

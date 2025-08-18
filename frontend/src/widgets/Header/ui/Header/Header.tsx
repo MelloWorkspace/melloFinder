@@ -1,10 +1,10 @@
+import { Avatar } from "@mui/material";
 import type { FC } from "react";
 import { Link } from "react-router-dom";
-import { getMainPageRoute } from "../../../../shared/constants/routes/routes";
-import { Avatar } from "@mui/material";
-import { Caption, H4 } from "../../../../shared/ui/Typography/Typography";
 
 import Logo from "../../../../shared/assets/icons/Logo.svg";
+import { getMainPageRoute } from "../../../../shared/constants/routes/routes";
+import { Caption, H4 } from "../../../../shared/ui/Typography/Typography";
 
 import styles from "./Header.module.scss";
 
