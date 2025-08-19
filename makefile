@@ -1,3 +1,11 @@
+dev: frontend_dev backend_dev
+
+frontend_dev: 
+	npm --prefix frontend run dev
+
+backend_dev:
+	$(MAKE) -C backend run
+
 setup: 
 	./setup.sh
 
