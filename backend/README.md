@@ -1,90 +1,162 @@
-# Go Restful API Boilerplate
+# GORSK - GO(lang) Restful Starter Kit
 
-[![GoDoc Badge]][godoc] [![GoReportCard Badge]][goreportcard]
+[![Build Status](https://travis-ci.org/ribice/gorsk.svg?branch=master)](https://travis-ci.org/ribice/gorsk)
+[![codecov](https://codecov.io/gh/ribice/gorsk/branch/master/graph/badge.svg)](https://codecov.io/gh/ribice/gorsk)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ribice/gorsk)](https://goreportcard.com/report/github.com/ribice/gorsk)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c3cb09dbc0bc43186464/maintainability)](https://codeclimate.com/github/ribice/gorsk/maintainability)
 
-Easily extendible RESTful API boilerplate aiming to follow idiomatic go and best practice.
+**[Gorsk V2 is released - read more about it](https://www.dev.ribic.ba/refactoring-gorsk/)**
 
-The goal of this boiler is to have a solid and structured foundation to build upon on.
+Gorsk is a Golang starter kit for developing RESTful services. It is designed to help you kickstart your project, skipping the 'setting-up part' and jumping straight to writing business logic.
 
-Any feedback and pull requests are welcome and highly appreciated. Feel free to open issues just for comments and discussions.
+Previously Gorsk was built using [Gin](https://github.com/gin-gonic/gin). Gorsk using Gin is available [HERE](https://github.com/ribice/gorsk-gin).
 
-## Features
+Gorsk follows SOLID principles, with package design being inspired by several package designs, including Ben Johnson's [Standard Package Layout](https://medium.com/@benbjohnson/standard-package-layout-7cdbc8391fc1), [Go Standard Package Layout](https://github.com/golang-standards/project-layout) with my own ideas applied to both. The idea for building this project and its readme structure was inspired by [this](https://github.com/qiangxue/golang-restful-starter-kit).
 
-The following feature set is a minimal selection of typical Web API requirements:
+This starter kit currently provides:
 
-- Configuration using [viper](https://github.com/spf13/viper)
-- CLI features using [cobra](https://github.com/spf13/cobra)
-- PostgreSQL support including migrations using [bun](https://github.com/uptrace/bun)
-- Structured logging with [Logrus](https://github.com/sirupsen/logrus)
-- Routing with [chi router](https://github.com/go-chi/chi) and middleware, following [chi rest example](https://github.com/go-chi/chi/tree/master/_examples/rest)
-- JWT Authentication using [lestrrat-go/jwx](https://github.com/lestrrat-go/jwx) with example passwordless email authentication
-- Request data validation using [ozzo-validation](https://github.com/go-ozzo/ozzo-validation)
-- HTML emails with [go-mail](https://github.com/go-mail/mail)
+* Fully featured RESTful endpoints for authentication, changing password and CRUD operations on the user entity
+* JWT authentication and session
+* Application configuration via config file (yaml)
+* RBAC (role-based access control)
+* Structured logging
+* Great performance
+* Request marshaling and data validation
+* API Docs using SwaggerUI
+* Mocking using stdlib
+* Complete test coverage
+* Containerized database query tests
 
-## Start Application
+The following dependencies are used in this project (generated using [Glice](https://github.com/ribice/glice)):
 
-- Clone and change into this repository
+```bash
+|-------------------------------------|--------------------------------------------|--------------|
+|             DEPENDENCY              |                  REPOURL                   |   LICENSE    |
+|-------------------------------------|--------------------------------------------|--------------|
+| github.com/labstack/echo            | https://github.com/labstack/echo           | MIT          |
+| github.com/go-pg/pg                 | https://github.com/go-pg/pg                | bsd-2-clause |
+| github.com/dgrijalva/jwt-go         | https://github.com/dgrijalva/jwt-go        | MIT          |
+| github.com/rs/zerolog               | https://github.com/rs/zerolog              | MIT          |
+| golang.org/x/crypto/bcrypt          | https://github.com/golang/crypto           |              |
+| gopkg.in/yaml.v2                    | https://github.com/go-yaml/yaml            |              |
+| gopkg.in/go-playground/validator.v8 | https://github.com/go-playground/validator | MIT          |
+| github.com/lib/pq                   | https://github.com/lib/pq                  | Other        |
+| github.com/nbutton23/zxcvbn-go      | https://github.com/nbutton23/zxcvbn-go     | MIT          |
+| github.com/fortytw2/dockertest      | https://github.com/fortytw2/dockertest     | MIT          |
+| github.com/stretchr/testify         | https://github.com/stretchr/testify        | Other        |
+|-------------------------------------|--------------------------------------------|--------------|
+```
 
-### Local
+1. Echo - HTTP 'framework'.
+2. Go-Pg - PostgreSQL ORM
+3. JWT-Go - JWT Authentication
+4. Zerolog - Structured logging
+5. Bcrypt - Password hashing
+6. Yaml - Unmarshalling YAML config file
+7. Validator - Request validation.
+8. lib/pq - PostgreSQL driver
+9. zxcvbn-go - Password strength checker
+10. DockerTest - Testing database queries
+11. Testify/Assert - Asserting test results
 
-- Create a postgres database and adjust environment variables in dev.env
-- Run the application to see available commands: `go run main.go`
-- Run all migrations from database/migrate folder: `go run main.go migrate`
-- Run the application with command _serve_: `go run main.go serve`
+Most of these can easily be replaced with your own choices since their usage is abstracted and localized.
 
-### Using Docker Compose
+## Getting started
 
-- First start the database only: `docker compose up -d postgres`
-- Once initialize the database by running all migrations in database/migrate folder: `docker compose run server ./main migrate`
-- Start the api server: `docker compose up`
+Using Gorsk requires having Go 1.7 or above. Once you downloaded Gorsk (either using Git or go get) you need to configure the following:
 
-### Environment Variables
+1. To use Gorsk as a starting point of a real project whose package name is something like `github.com/author/project`, move the directory `$GOPATH/github.com/ribice/gorsk` to `$GOPATH/github.com/author/project`. We use [task](https://github.com/go-task/task) as a task runner. Run ``task relocate`` to rename the packages, e.g. ``task relocate TARGET=github.com/author/project``
 
-By default viper will look at dev.env for a config file. It contains the applications defaults if no environment variables are set otherwise.
+2. Change the configuration file according to your needs, or create a new one.
 
-## API Routes
+3. Set the ("ENVIRONMENT_NAME") environment variable, either using terminal or os.Setenv("ENVIRONMENT_NAME","dev").
 
-### Authentication
+4. Set the JWT secret env var ("JWT_SECRET")
 
-For passwordless login following routes are available:
+5. In cmd/migration/main.go set up psn variable and then run it (go run main.go). It will create all tables, and necessery data, with a new account username/password admin/admin.
 
-| Path          | Method | Required JSON | Header                                | Description                                                             |
-| ------------- | ------ | ------------- | ------------------------------------- | ----------------------------------------------------------------------- |
-| /auth/login   | POST   | email         |                                       | the email you want to login with (see below)                            |
-| /auth/token   | POST   | token         |                                       | the token you received via email (or printed to stdout if smtp not set) |
-| /auth/refresh | POST   |               | Authorization: "Bearer refresh_token" | refresh JWTs                                                            |
-| /auth/logout  | POST   |               | Authorizaiton: "Bearer refresh_token" | logout from this device                                                 |
+6. Run the app using:
 
-Outgoing emails containing the login token will be printed to stdout if no valid email smtp settings are provided by environment variables (see dev.env). If _EMAIL_SMTP_HOST_ is set but the host can not be reached the application will exit immediately at start.
+```bash
+go run cmd/api/main.go
+```
 
-### Example API
+The application runs as an HTTP server at port 8080. It provides the following RESTful endpoints:
 
-The example api follows the patterns from the [chi rest example](https://github.com/go-chi/chi/tree/master/_examples/rest). Besides _/auth_ routes the API provides two main routes for _/api_ and _/admin_ requests, the latter requires to be logged in as administrator by providing the respective JWT in Authorization Header.
+* `POST /login`: accepts username/passwords and returns jwt token and refresh token
+* `GET /refresh/:token`: refreshes sessions and returns jwt token
+* `GET /me`: returns info about currently logged in user
+* `GET /swaggerui/` (with trailing slash): launches swaggerui in browser
+* `GET /v1/users`: returns list of users
+* `GET /v1/users/:id`: returns single user
+* `POST /v1/users`: creates a new user
+* `PATCH /v1/password/:id`: changes password for a user
+* `DELETE /v1/users/:id`: deletes a user
 
-Check [routes.md](routes.md) for a generated overview of the provided API routes.
+You can log in as admin to the application by sending a post request to localhost:8080/login with username `admin` and password `admin` in JSON body.
 
-### Testing
+### Implementing CRUD of another table
 
-Package auth/pwdless contains example api tests using a mocked database. Run them with: `go test -v ./...`
+Let's say you have a table named 'cars' that handles employee's cars. To implement CRUD on this table you need:
 
-### Client API Access and CORS
+1. Inside `pkg/utl/model` create a new file named `car.go`. Inside put your entity (struct), and methods on the struct if you need them.
 
-The server is configured to serve a Progressive Web App (PWA) client from _./public_ folder (this repo only serves an example index.html, see below for a demo PWA client to put here). In this case enabling CORS is not required, because the client is served from the same host as the api.
+2. Create a new `car` folder in the (micro)service where your service will be located, most probably inside `api`. Inside create a file/service named car.go and test file for it (`car/car.go` and `car/car_test.go`). You can test your code without writing a single query by mocking the database logic inside /mock/mockdb folder. If you have complex queries interfering with other entities, you can create in this folder other files such as car_users.go or car_templates.go for example.
 
-If you want to access the api from a client that is served from a different host, including e.g. a development live reloading server with below demo client, you must enable CORS on the server first by setting environment variable _ENABLE_CORS=true_ on the server to allow api connections from clients served by other hosts.
+3. Inside car folder, create folders named `platform`, `transport` and `logging`.
 
-#### Demo client application
+4. Code for interacting with a platform like database (postgresql) should be placed under `car/platform/pgsql`. (`pkg/api/car/platform/pgsql/car.go`)
 
-A deployed demo version can also be found at [https://go-base.leapcell.app/](https://go-base.leapcell.app/)
+5. In `pkg/api/car/transport` create a new file named `http.go`. This is where your handlers are located. Under the same location create http_test.go to test your API.
 
-For demonstration of the login and account management features this API serves a demo [Vue.js](https://vuejs.org) PWA. It's source code can be found [here](https://github.com/dhax/go-base-vue). You can build and put it into the api's _./public_ folder, or use the live development server (requires ENABLE_CORS environment variable set to true).
+6. In logging directory create a file named `car.go` and copy the logic from another service. This serves as request/response logging.
 
-Use one of the following bootstrapped users for login:
+6. In `pkg/api/api.go` wire up all the logic, by instantiating car service, passing it to the logging and transport service afterwards.
 
-- <admin@example.com> (has access to admin panel)
-- <user@example.com>
+### Implementing other platforms
 
-[godoc]: https://godoc.org/github.com/dhax/go-base
-[godoc badge]: https://godoc.org/github.com/dhax/go-base?status.svg
-[goreportcard]: https://goreportcard.com/report/github.com/dhax/go-base
-[goreportcard badge]: https://goreportcard.com/badge/github.com/dhax/go-base
+Similarly to implementing APIs relying only on a database, you can implement other platforms by:
+
+1. In the service package, in car.go add interface that corresponds to the platform, for example, Indexer or Reporter.
+
+2. Rest of the procedure is same, except that in `/platform` you would create a new folder for your platform, for example, `elastic`.
+
+3. Once the new platform logic is implemented, create an instance of it in main.go (for example `elastic.Client`) and pass it as an argument to car service (`pkg/api/car/car.go`).
+
+### Running database queries in transaction
+
+To use a transaction, before interacting with db create a new transaction:
+
+```go
+err := s.db.RunInTransaction(func (tx *pg.Tx) error{
+    // Application service here
+})
+````
+
+Instead of passing database client as `s.db` , inside this function pass it as `tx`. Handle the error accordingly.
+
+## Project Structure
+
+1. Root directory contains things not related to code directly, e.g. docker-compose, CI/CD, readme, bash scripts etc. It should also contain vendor folder, Gopkg.toml and Gopkg.lock if dep is being used.
+
+2. Cmd package contains code for starting applications (main packages). The directory name for each application should match the name of the executable you want to have. Gorsk is structured as a monolith application but can be easily restructured to contain multiple microservices. An application may produce multiple binaries, therefore Gorsk uses the Go convention of placing main package as a subdirectory of the cmd package. As an example, scheduler application's binary would be located under cmd/cron. It also loads the necessery configuration and passes it to the service initializers.
+
+3. Rest of the code is located under /pkg. The pkg directory contains `utl` and 'microservice' directories.
+
+4. Microservice directories, like api (naming corresponds to `cmd/` folder naming) contains multiple folders for each domain it interacts with, for example: user, car, appointment etc.
+
+5. Domain directories, like user, contain all application/business logic and two additional directories: platform and transport.
+
+6. Platform folder contains various packages that provide support for things like databases, authentication or even marshaling. Most of the packages located under platform are decoupled by using interfaces. Every platform has its own package, for example, postgres, elastic, redis, memcache etc.
+
+7. Transport package contains HTTP handlers. The package receives the requests, marshals, validates then passes it to the corresponding service.
+
+8. Utl directory contains helper packages and models. Packages such as mock, middleware, configuration, server are located here.
+
+## License
+
+gorsk is licensed under the MIT license. Check the [LICENSE](LICENSE) file for details.
+
+## Author
+
+[Emir Ribic](https://dev.ribic.ba)

@@ -1,25 +1,7 @@
-.DS_STORE
-.vscode
-.realize.yaml
-.idea
+profile.out
+coverage.txt
+cmd/api/config/files/config.dev.yaml
+.idea/
+.DS_Store
 
-.env
-.env.*
-!.env.example
-
-debug
-go-base
-
-# Binaries for programs and plugins
-*.exe
-*.dll
-*.so
-*.dylib
-
-# Test binary, build with `go test -c`
-*.test
-
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
-
-main
+*env
