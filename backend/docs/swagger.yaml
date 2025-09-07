@@ -1,0 +1,189 @@
+basePath: /api/v1
+definitions:
+  dto.AcceptInviteRequest:
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        minLength: 6
+        type: string
+      token:
+        type: string
+    required:
+    - first_name
+    - last_name
+    - password
+    - token
+    type: object
+  dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.RegisterRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    type: object
+  helpers.Response:
+    properties:
+      data: {}
+      error:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server.
+  title: Project API
+  version: "1.0"
+paths:
+  /auth/accept-invite:
+    post:
+      consumes:
+      - application/json
+      description: Accept invitation and create account
+      parameters:
+      - description: Accept invite request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AcceptInviteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Accept invitation
+      tags:
+      - auth
+  /auth/invite:
+    post:
+      consumes:
+      - application/json
+      description: Send invitation to email
+      parameters:
+      - description: Register request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Send invitation
+      tags:
+      - auth
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user
+      parameters:
+      - description: Login request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Login
+      tags:
+      - auth
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users (admin only)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all users
+      tags:
+      - users
+  /users/profile:
+    get:
+      consumes:
+      - application/json
+      description: Get current user profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user profile
+      tags:
+      - users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,162 +1,609 @@
-# GORSK - GO(lang) Restful Starter Kit
+# Project API
 
-[![Build Status](https://travis-ci.org/ribice/gorsk.svg?branch=master)](https://travis-ci.org/ribice/gorsk)
-[![codecov](https://codecov.io/gh/ribice/gorsk/branch/master/graph/badge.svg)](https://codecov.io/gh/ribice/gorsk)
-[![Go Report Card](https://goreportcard.com/badge/github.com/ribice/gorsk)](https://goreportcard.com/report/github.com/ribice/gorsk)
-[![Maintainability](https://api.codeclimate.com/v1/badges/c3cb09dbc0bc43186464/maintainability)](https://codeclimate.com/github/ribice/gorsk/maintainability)
+A full-featured REST API built with Go using MVC architecture, invite system, and JWT authentication.
 
-**[Gorsk V2 is released - read more about it](https://www.dev.ribic.ba/refactoring-gorsk/)**
+## 🚀 Tech Stack
 
-Gorsk is a Golang starter kit for developing RESTful services. It is designed to help you kickstart your project, skipping the 'setting-up part' and jumping straight to writing business logic.
+- **Framework**: Echo v4
+- **ORM**: GORM
+- **Database**: PostgreSQL
+- **Authentication**: JWT + bcrypt
+- **Documentation**: Swagger/OpenAPI
+- **Containerization**: Docker & Docker Compose
 
-Previously Gorsk was built using [Gin](https://github.com/gin-gonic/gin). Gorsk using Gin is available [HERE](https://github.com/ribice/gorsk-gin).
+## 📋 Features
 
-Gorsk follows SOLID principles, with package design being inspired by several package designs, including Ben Johnson's [Standard Package Layout](https://medium.com/@benbjohnson/standard-package-layout-7cdbc8391fc1), [Go Standard Package Layout](https://github.com/golang-standards/project-layout) with my own ideas applied to both. The idea for building this project and its readme structure was inspired by [this](https://github.com/qiangxue/golang-restful-starter-kit).
+- ✅ Invite-based registration system
+- ✅ JWT authentication
+- ✅ Password hashing (bcrypt)
+- ✅ User CRUD operations
+- ✅ Auto-generated API documentation (Swagger)
+- ✅ Ready-to-use Docker configuration
+- ✅ Automatic database migrations
+- ✅ CORS and authentication middleware
+- ✅ Structured logging
 
-This starter kit currently provides:
+## 🏗️ Project Architecture
 
-* Fully featured RESTful endpoints for authentication, changing password and CRUD operations on the user entity
-* JWT authentication and session
-* Application configuration via config file (yaml)
-* RBAC (role-based access control)
-* Structured logging
-* Great performance
-* Request marshaling and data validation
-* API Docs using SwaggerUI
-* Mocking using stdlib
-* Complete test coverage
-* Containerized database query tests
-
-The following dependencies are used in this project (generated using [Glice](https://github.com/ribice/glice)):
-
-```bash
-|-------------------------------------|--------------------------------------------|--------------|
-|             DEPENDENCY              |                  REPOURL                   |   LICENSE    |
-|-------------------------------------|--------------------------------------------|--------------|
-| github.com/labstack/echo            | https://github.com/labstack/echo           | MIT          |
-| github.com/go-pg/pg                 | https://github.com/go-pg/pg                | bsd-2-clause |
-| github.com/dgrijalva/jwt-go         | https://github.com/dgrijalva/jwt-go        | MIT          |
-| github.com/rs/zerolog               | https://github.com/rs/zerolog              | MIT          |
-| golang.org/x/crypto/bcrypt          | https://github.com/golang/crypto           |              |
-| gopkg.in/yaml.v2                    | https://github.com/go-yaml/yaml            |              |
-| gopkg.in/go-playground/validator.v8 | https://github.com/go-playground/validator | MIT          |
-| github.com/lib/pq                   | https://github.com/lib/pq                  | Other        |
-| github.com/nbutton23/zxcvbn-go      | https://github.com/nbutton23/zxcvbn-go     | MIT          |
-| github.com/fortytw2/dockertest      | https://github.com/fortytw2/dockertest     | MIT          |
-| github.com/stretchr/testify         | https://github.com/stretchr/testify        | Other        |
-|-------------------------------------|--------------------------------------------|--------------|
+```
+project/
+├── src/
+│   ├── config/          # Application configuration
+│   ├── controllers/     # HTTP handlers (MVC Controllers)
+│   ├── dto/            # Data Transfer Objects
+│   ├── helpers/        # Helper functions
+│   ├── middlewares/    # HTTP middleware
+│   ├── models/         # Data models (MVC Models)
+│   ├── routes/         # Route definitions
+│   └── services/       # Business logic (MVC Services)
+│   └── database/       # DB operations
+├── main.go.            # Application entry point
+├── migrations/         # SQL migrations
+├── docs/               # Swagger documentation
+├── Dockerfile
+├── Makefile
+└── README.md
 ```
 
-1. Echo - HTTP 'framework'.
-2. Go-Pg - PostgreSQL ORM
-3. JWT-Go - JWT Authentication
-4. Zerolog - Structured logging
-5. Bcrypt - Password hashing
-6. Yaml - Unmarshalling YAML config file
-7. Validator - Request validation.
-8. lib/pq - PostgreSQL driver
-9. zxcvbn-go - Password strength checker
-10. DockerTest - Testing database queries
-11. Testify/Assert - Asserting test results
+## 🛠️ Installation and Setup
 
-Most of these can easily be replaced with your own choices since their usage is abstracted and localized.
+### Requirements
 
-## Getting started
+- Go 1.21+
+- PostgreSQL 15+
+- Docker (optional)
+- Make (optional)
 
-Using Gorsk requires having Go 1.7 or above. Once you downloaded Gorsk (either using Git or go get) you need to configure the following:
-
-1. To use Gorsk as a starting point of a real project whose package name is something like `github.com/author/project`, move the directory `$GOPATH/github.com/ribice/gorsk` to `$GOPATH/github.com/author/project`. We use [task](https://github.com/go-task/task) as a task runner. Run ``task relocate`` to rename the packages, e.g. ``task relocate TARGET=github.com/author/project``
-
-2. Change the configuration file according to your needs, or create a new one.
-
-3. Set the ("ENVIRONMENT_NAME") environment variable, either using terminal or os.Setenv("ENVIRONMENT_NAME","dev").
-
-4. Set the JWT secret env var ("JWT_SECRET")
-
-5. In cmd/migration/main.go set up psn variable and then run it (go run main.go). It will create all tables, and necessery data, with a new account username/password admin/admin.
-
-6. Run the app using:
+### 1. Clone Repository
 
 ```bash
-go run cmd/api/main.go
+git clone <repository-url>
+cd project
 ```
 
-The application runs as an HTTP server at port 8080. It provides the following RESTful endpoints:
+### 2. Install Dependencies
 
-* `POST /login`: accepts username/passwords and returns jwt token and refresh token
-* `GET /refresh/:token`: refreshes sessions and returns jwt token
-* `GET /me`: returns info about currently logged in user
-* `GET /swaggerui/` (with trailing slash): launches swaggerui in browser
-* `GET /v1/users`: returns list of users
-* `GET /v1/users/:id`: returns single user
-* `POST /v1/users`: creates a new user
-* `PATCH /v1/password/:id`: changes password for a user
-* `DELETE /v1/users/:id`: deletes a user
+```bash
+go mod download
+# or
+make deps
+```
 
-You can log in as admin to the application by sending a post request to localhost:8080/login with username `admin` and password `admin` in JSON body.
+### 3. Environment Setup
 
-### Implementing CRUD of another table
+Copy environment variables file:
 
-Let's say you have a table named 'cars' that handles employee's cars. To implement CRUD on this table you need:
+```bash
+cp .env.example .env
+```
 
-1. Inside `pkg/utl/model` create a new file named `car.go`. Inside put your entity (struct), and methods on the struct if you need them.
+Edit the `.env` file:
 
-2. Create a new `car` folder in the (micro)service where your service will be located, most probably inside `api`. Inside create a file/service named car.go and test file for it (`car/car.go` and `car/car_test.go`). You can test your code without writing a single query by mocking the database logic inside /mock/mockdb folder. If you have complex queries interfering with other entities, you can create in this folder other files such as car_users.go or car_templates.go for example.
+```env
+# Server
+PORT=8080
+HOST=localhost
 
-3. Inside car folder, create folders named `platform`, `transport` and `logging`.
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=your_password
+DB_NAME=project_db
+DB_SSLMODE=disable
 
-4. Code for interacting with a platform like database (postgresql) should be placed under `car/platform/pgsql`. (`pkg/api/car/platform/pgsql/car.go`)
+# JWT
+JWT_SECRET=your_super_secret_jwt_key_here_make_it_long_and_secure
+JWT_EXPIRES_IN=24h
 
-5. In `pkg/api/car/transport` create a new file named `http.go`. This is where your handlers are located. Under the same location create http_test.go to test your API.
+# Invite
+INVITE_EXPIRES_IN=72h
+```
 
-6. In logging directory create a file named `car.go` and copy the logic from another service. This serves as request/response logging.
+### 4. Database Setup
 
-6. In `pkg/api/api.go` wire up all the logic, by instantiating car service, passing it to the logging and transport service afterwards.
+#### Option A: Local PostgreSQL
 
-### Implementing other platforms
+Create database:
 
-Similarly to implementing APIs relying only on a database, you can implement other platforms by:
+```sql
+CREATE DATABASE project_db;
+```
 
-1. In the service package, in car.go add interface that corresponds to the platform, for example, Indexer or Reporter.
+Apply migrations:
 
-2. Rest of the procedure is same, except that in `/platform` you would create a new folder for your platform, for example, `elastic`.
+```bash
+make migrate-up
+```
 
-3. Once the new platform logic is implemented, create an instance of it in main.go (for example `elastic.Client`) and pass it as an argument to car service (`pkg/api/car/car.go`).
+#### Option B: Docker
 
-### Running database queries in transaction
+```bash
+# Run PostgreSQL in Docker
+docker run --name project-postgres \
+  -e POSTGRES_DB=project_db \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=password \
+  -p 5432:5432 \
+  -d postgres:15
 
-To use a transaction, before interacting with db create a new transaction:
+# Apply migrations
+make migrate-up
+```
+
+### Create new migrations
+
+Change or add model в src/models/
+increment CURRENT_SCHEMA_VERSION in migrator.go
+make run
+
+### 5. Generate Swagger Documentation
+
+First, install swag if not already installed:
+
+```bash
+# Install swag
+go install github.com/swaggo/swag/cmd/swag@latest
+
+# Generate documentation
+make swag
+```
+
+The Swagger documentation will be generated in the `docs/` folder.
+
+## 🚀 Running the Application
+
+### Local Run
+
+```bash
+# Simple run
+go run cmd/server/main.go
+
+# Or via Makefile
+make run
+
+# For development with hot reload (requires air)
+make dev
+```
+
+```
+- API: http://localhost:8080/api/v1/
+- Swagger UI: http://localhost:8080/swagger/index.html
+- Health Check: http://localhost:8080/health
+```
+
+### Docker Run
+
+```bash
+# Build image
+make docker-build
+
+# Run container
+make docker-run
+
+# Or full stack with DB
+make compose-up
+```
+
+Application will be available at: `http://localhost:8080`
+
+## 📚 API Documentation
+
+### Swagger UI
+
+After starting the application, documentation is available at:
+`http://localhost:8080/swagger/index.html`
+
+### Main Endpoints
+
+#### Authentication
+
+```http
+# Send invite
+POST /api/v1/auth/invite
+Content-Type: application/json
+
+{
+  "email": "user@example.com"
+}
+```
+
+```http
+# Accept invite and create account
+POST /api/v1/auth/accept-invite
+Content-Type: application/json
+
+{
+  "token": "invite_token_here",
+  "password": "securepassword",
+  "first_name": "John",
+  "last_name": "Doe"
+}
+```
+
+```http
+# Login
+POST /api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "securepassword"
+}
+```
+
+#### Users (require authentication)
+
+```http
+# Get profile
+GET /api/v1/users/profile
+Authorization: Bearer <jwt_token>
+```
+
+```http
+# Get all users
+GET /api/v1/users
+Authorization: Bearer <jwt_token>
+```
+
+#### Service Endpoints
+
+```http
+# Health check
+GET /health
+```
+
+## 🔧 Development Commands
+
+### Makefile Commands
+
+```bash
+# Build application
+make build
+
+# Run in development mode
+make run
+
+# Run with hot reload
+make dev
+
+# Run tests
+make test
+
+# Lint code
+make lint
+
+# Format code
+make fmt
+
+# Security check
+make security
+
+# Generate Swagger documentation
+make swag
+
+# Migrations
+make migrate-up          # Apply migrations
+make migrate-down        # Rollback migrations
+make migrate-create name=migration_name  # Create new migration
+
+# Docker commands
+make docker-build        # Build Docker image
+make docker-run          # Run in Docker
+make compose-up          # Start full stack
+make compose-down        # Stop stack
+
+# Full development setup
+make setup
+```
+
+### Manual Commands
+
+```bash
+# Install additional tools
+go install github.com/cosmtrek/air@latest          # Hot reload
+go install github.com/swaggo/swag/cmd/swag@latest  # Swagger
+go install github.com/golang-migrate/migrate/v4/cmd/migrate@latest  # Migrations
+
+# Working with migrations
+migrate create -ext sql -dir migrations create_users_table
+migrate -path migrations -database "postgres://user:pass@localhost:5432/db?sslmode=disable" up
+
+# Generate mocks for testing
+go generate ./...
+```
+
+## 📝 Swagger Documentation Generation
+
+The project uses Swagger annotations in the code to generate API documentation automatically.
+
+### Adding Swagger Annotations
+
+Example controller with Swagger annotations:
 
 ```go
-err := s.db.RunInTransaction(func (tx *pg.Tx) error{
-    // Application service here
-})
-````
+// Login godoc
+// @Summary Login user
+// @Description Authenticate user with email and password
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body dto.LoginRequest true "Login credentials"
+// @Success 200 {object} helpers.Response{data=dto.AuthResponse}
+// @Failure 400 {object} helpers.Response
+// @Failure 401 {object} helpers.Response
+// @Router /auth/login [post]
+func (ctrl *AuthController) Login(c echo.Context) error {
+    // implementation
+}
+```
 
-Instead of passing database client as `s.db` , inside this function pass it as `tx`. Handle the error accordingly.
+### Swagger Configuration
 
-## Project Structure
+Main configuration is in `cmd/server/main.go`:
 
-1. Root directory contains things not related to code directly, e.g. docker-compose, CI/CD, readme, bash scripts etc. It should also contain vendor folder, Gopkg.toml and Gopkg.lock if dep is being used.
+```go
+// @title Project API
+// @version 1.0
+// @description This is a sample REST API server with invite system
+// @termsOfService http://swagger.io/terms/
 
-2. Cmd package contains code for starting applications (main packages). The directory name for each application should match the name of the executable you want to have. Gorsk is structured as a monolith application but can be easily restructured to contain multiple microservices. An application may produce multiple binaries, therefore Gorsk uses the Go convention of placing main package as a subdirectory of the cmd package. As an example, scheduler application's binary would be located under cmd/cron. It also loads the necessery configuration and passes it to the service initializers.
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
 
-3. Rest of the code is located under /pkg. The pkg directory contains `utl` and 'microservice' directories.
+// @license.name MIT
+// @license.url https://opensource.org/licenses/MIT
 
-4. Microservice directories, like api (naming corresponds to `cmd/` folder naming) contains multiple folders for each domain it interacts with, for example: user, car, appointment etc.
+// @host localhost:8080
+// @BasePath /api/v1
 
-5. Domain directories, like user, contain all application/business logic and two additional directories: platform and transport.
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
+```
 
-6. Platform folder contains various packages that provide support for things like databases, authentication or even marshaling. Most of the packages located under platform are decoupled by using interfaces. Every platform has its own package, for example, postgres, elastic, redis, memcache etc.
+### Generating Documentation
 
-7. Transport package contains HTTP handlers. The package receives the requests, marshals, validates then passes it to the corresponding service.
+```bash
+# Generate Swagger docs
+swag init -g cmd/server/main.go -o docs
 
-8. Utl directory contains helper packages and models. Packages such as mock, middleware, configuration, server are located here.
+# Or use Makefile
+make swag
+```
 
-## License
+This will create:
 
-gorsk is licensed under the MIT license. Check the [LICENSE](LICENSE) file for details.
+- `docs/docs.go`
+- `docs/swagger.json`
+- `docs/swagger.yaml`
 
-## Author
+### Swagger UI Access
 
-[Emir Ribic](https://dev.ribic.ba)
+After running the application, access Swagger UI at:
+
+- `http://localhost:8080/swagger/index.html`
+
+## 🧪 Testing
+
+### Running Tests
+
+```bash
+# All tests
+make test
+
+# Tests with coverage
+go test -v -cover ./...
+
+# Integration tests
+go test -tags=integration ./...
+```
+
+### API Testing Examples
+
+```bash
+# Send invite
+curl -X POST http://localhost:8080/api/v1/auth/invite \
+  -H "Content-Type: application/json" \
+  -d '{"email": "test@example.com"}'
+
+# Accept invite
+curl -X POST http://localhost:8080/api/v1/auth/accept-invite \
+  -H "Content-Type: application/json" \
+  -d '{
+    "token": "your_invite_token",
+    "password": "password123",
+    "first_name": "John",
+    "last_name": "Doe"
+  }'
+
+# Login
+curl -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "test@example.com", "password": "password123"}'
+
+# Get profile (with token)
+curl -X GET http://localhost:8080/api/v1/users/profile \
+  -H "Authorization: Bearer your_jwt_token"
+```
+
+## 🔒 Security
+
+### Environment Variables
+
+Never commit `.env` file to repository. Use:
+
+- Different secret keys for different environments
+- Strong database passwords
+- Long random strings for JWT_SECRET
+
+### Recommendations
+
+- Use HTTPS in production
+- Configure proper CORS policies
+- Regularly update dependencies
+- Implement rate limiting for API
+
+## 📊 Monitoring and Logging
+
+### Logs
+
+Application uses structured logging via Echo middleware:
+
+```bash
+# View logs in Docker
+docker logs project-app
+
+# Follow logs in real-time
+docker logs -f project-app
+```
+
+### Metrics
+
+Health check endpoint:
+
+```http
+GET /health
+```
+
+Response:
+
+```json
+{
+  "status": "ok"
+}
+```
+
+## 🚀 Deployment
+
+### Docker in Production
+
+```bash
+# Build production image
+make build-prod
+
+# Run with external DB
+docker run -d \
+  --name project-app \
+  -p 8080:8080 \
+  -e DB_HOST=your-db-host \
+  -e DB_PASSWORD=your-secure-password \
+  -e JWT_SECRET=your-super-secret-key \
+  project:latest
+```
+
+### Docker Compose for Production
+
+Create `docker-compose.prod.yml`:
+
+```yaml
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres.conf:/etc/postgresql/postgresql.conf
+    restart: unless-stopped
+
+  app:
+    build: .
+    ports:
+      - "80:8080"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+```
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Database connection error**
+
+   ```bash
+   # Check if PostgreSQL is running
+   ps aux | grep postgres
+
+   # Test connection
+   psql -h localhost -U postgres -d project_db
+   ```
+
+2. **Migration errors**
+
+   ```bash
+   # Reset migrations
+   make migrate-down
+   make migrate-up
+   ```
+
+3. **Swagger errors**
+   ```bash
+   # Reinstall swag
+   go install github.com/swaggo/swag/cmd/swag@latest
+   make swag
+   ```
+
+### Debug Mode
+
+```bash
+# Run with debug logs
+export LOG_LEVEL=debug
+make run
+
+# Check environment variables
+env | grep -E "(DB_|JWT_|PORT)"
+```
+
+## 🤝 Contributing
+
+### Commit Structure
+
+```
+feat: add new functionality
+fix: fix bug
+docs: update documentation
+style: code formatting
+refactor: refactor without functionality changes
+test: add tests
+chore: update dependencies
+```
+
+### Development Process
+
+1. Create branch: `git checkout -b feature/new-feature`
+2. Make changes
+3. Run tests: `make test`
+4. Run linter: `make lint`
+5. Create Pull Request
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file for details
+
+## 📞 Support
+
+- Create GitHub Issue for bugs
+- Use Discussions for questions
+- Check existing Issues before creating new ones
+
+---
+
+**Happy coding! 🚀**
