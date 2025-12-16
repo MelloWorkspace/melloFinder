@@ -1,9 +1,11 @@
+// config/config.go
 package config
 
 import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -14,17 +16,18 @@ type Config struct {
 	Database DatabaseConfig
 	JWT      JWTConfig
 	Invite   InviteConfig
+	SMTP     SMTPConfig
+	App      AppConfig
 }
 
 type ServerConfig struct {
 	Port string
-	Host string
 }
 
 type DatabaseConfig struct {
 	// Приоритет: если URL задан, используем его
 	URL string
-	
+
 	// Fallback: если URL не задан, собираем из частей
 	Host     string
 	Port     string
@@ -43,6 +46,20 @@ type InviteConfig struct {
 	ExpiresIn time.Duration
 }
 
+type SMTPConfig struct {
+	Host     string
+	Port     int
+	Username string
+	Password string
+	From     string
+	UseTLS   bool
+}
+
+type AppConfig struct {
+	Name        string
+	FrontendURL string
+}
+
 func Load() *Config {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
@@ -54,12 +71,11 @@ func Load() *Config {
 	return &Config{
 		Server: ServerConfig{
 			Port: getEnv("PORT", "8080"),
-			Host: getEnv("HOST", "localhost"),
 		},
 		Database: DatabaseConfig{
 			// Сначала пробуем DATABASE_URL
-			URL:      getEnv("DATABASE_URL", ""),
-			
+			URL: getEnv("DATABASE_URL", ""),
+
 			// Затем отдельные параметры (для совместимости)
 			Host:     getEnv("DB_HOST", "localhost"),
 			Port:     getEnv("DB_PORT", "5432"),
@@ -75,6 +91,18 @@ func Load() *Config {
 		Invite: InviteConfig{
 			ExpiresIn: inviteExpiresIn,
 		},
+		SMTP: SMTPConfig{
+			Host:     getEnv("SMTP_HOST", "smtp.gmail.com"),
+			Port:     getEnvInt("SMTP_PORT", 587),
+			Username: getEnv("SMTP_USERNAME", ""),
+			Password: getEnv("SMTP_PASSWORD", ""),
+			From:     getEnv("SMTP_FROM", "noreply@yourapp.com"),
+			UseTLS:   getEnvBool("SMTP_USE_TLS", true),
+		},
+		App: AppConfig{
+			Name:        getEnv("APP_NAME", "MelloFinder"),
+			FrontendURL: getEnv("FRONTEND_URL", "http://localhost:3000"),
+		},
 	}
 }
 
@@ -84,7 +112,7 @@ func (d *DatabaseConfig) GetDSN() string {
 	if d.URL != "" {
 		return d.URL
 	}
-	
+
 	// Иначе собираем из отдельных параметров
 	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
 		d.Host, d.User, d.Password, d.Name, d.Port, d.SSLMode)
@@ -101,7 +129,7 @@ func (d *DatabaseConfig) GetConnectionInfo() string {
 		// Маскируем пароль в URL для логирования
 		return maskPasswordInURL(d.URL)
 	}
-	
+
 	return fmt.Sprintf("host=%s port=%s dbname=%s user=%s",
 		d.Host, d.Port, d.Name, d.User)
 }
@@ -111,6 +139,34 @@ func getEnv(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
+}
+
+func getEnvInt(key string, defaultValue int) int {
+	if value := os.Getenv(key); value != "" {
+		if intValue, err := strconv.Atoi(value); err == nil {
+			return intValue
+		}
+	}
+	return defaultValue
+}
+
+func getEnvBool(key string, defaultValue bool) bool {
+	if value := os.Getenv(key); value != "" {
+		if boolValue, err := strconv.ParseBool(value); err == nil {
+			return boolValue
+		}
+	}
+	return defaultValue
+}
+
+func getEnvDuration(key string, defaultValue string) time.Duration {
+	if value := os.Getenv(key); value != "" {
+		if duration, err := time.ParseDuration(value); err == nil {
+			return duration
+		}
+	}
+	duration, _ := time.ParseDuration(defaultValue)
+	return duration
 }
 
 // maskPasswordInURL маскирует пароль в URL для безопасного логирования

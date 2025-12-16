@@ -1,10 +1,15 @@
 import type { FormEvent } from "react";
-import { type FC, useState } from "react";
-import { Link } from "react-router-dom";
+import { type FC, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import { getSignUpPageRoute } from "../../../../shared/constants";
 import { Button, Input, Typography } from "../../../../shared/ui";
-import { getAuthActions, getAuthLoading } from "../../model/store/store";
+import {
+	getAuthActions,
+	getAuthError,
+	getAuthLoading,
+	getAuthUser,
+} from "../../model/store/store";
 import type { LoginParameters } from "../../model/types/types";
 
 import styles from "./LoginForm.module.scss";
@@ -19,8 +24,24 @@ export const LoginForm: FC<Props> = ({ className }) => {
 		password: "",
 	});
 
-	const { login } = getAuthActions();
+	const { login, clearError } = getAuthActions();
 	const loading = getAuthLoading();
+	const error = getAuthError();
+	const user = getAuthUser();
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (user) {
+			// Перенаправляем на главную страницу после успешного входа
+			navigate("/dashboard"); // или куда нужно
+		}
+	}, [user, navigate]);
+
+	useEffect(() => {
+		return () => {
+			clearError();
+		};
+	}, [clearError]);
 
 	const onChangeEmail = (val: string) => {
 		setForm({ ...form, email: val });
@@ -32,28 +53,40 @@ export const LoginForm: FC<Props> = ({ className }) => {
 
 	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		await login(form);
+		try {
+			await login(form);
+		} catch (error) {
+			// Ошибка уже обработана в store
+		}
 	};
 
 	return (
 		<form className={className} onSubmit={onSubmit}>
 			<h1 className={styles.title}>Войти в профиль</h1>
 			<Input
-				className={styles.email}
+				required
+				className={styles.input}
 				placeholder="E-mail"
+				type="email"
+				value={form.email}
 				onChange={onChangeEmail}
 			/>
 			<Input
-				className={styles.password}
+				required
+				className={styles.input}
 				placeholder="Пароль"
+				type="password"
+				value={form.password}
 				onChange={onChangePassword}
 			/>
-			{/* {error && <div className={styles.error}>{error}</div>} */}
-			<Button className={styles.register} disabled={loading} type="submit">
-				Войти
+
+			{error && <div className={styles.error}>{error}</div>}
+
+			<Button className={styles.loginBtn} disabled={loading} type="submit">
+				{loading ? "Вход..." : "Войти"}
 			</Button>
+
 			<div className={styles.additionalInfo}>
-				{/* <Link className={styles.link} to='/'>Забыли пароль</Link> */}
 				<Typography.Caption className={styles.text}>
 					Ещё нет аккаунта?
 				</Typography.Caption>

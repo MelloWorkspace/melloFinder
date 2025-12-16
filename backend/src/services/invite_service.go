@@ -25,37 +25,50 @@ func NewInviteService(db *gorm.DB, config *config.Config) *InviteService {
 }
 
 func (s *InviteService) CreateInvite(email string) (*models.Invite, error) {
-	// Check if user already exists
-	var existingUser models.User
-	if err := s.db.Where("email = ?", email).First(&existingUser).Error; err == nil {
-		return nil, errors.New("user already exists")
-	}
-
-	// Check if invite already exists and is pending
-	var existingInvite models.Invite
-	if err := s.db.Where("email = ? AND status = ?", email, models.InviteStatusPending).First(&existingInvite).Error; err == nil {
-		if !existingInvite.IsExpired() {
-			return &existingInvite, nil
+	var invite *models.Invite
+	err := s.db.Transaction(func(tx *gorm.DB) error {
+		var existingUser models.User
+		if err := tx.Where("email = ?", email).First(&existingUser).Error; err == nil {
+			// Почему то не работает вроде(
+			return errors.New("User already exists")
 		}
-		// Mark as expired
-		existingInvite.Status = models.InviteStatusExpired
-		s.db.Save(&existingInvite)
-	}
 
-	// Generate token
-	token, err := s.generateToken()
+		// Проверка существующего инвайта
+		var existingInvite models.Invite
+		if err := tx.Where("email = ? AND status = ?", email, models.InviteStatusPending).First(&existingInvite).Error; err == nil {
+			if !existingInvite.IsExpired() {
+				invite = &existingInvite
+				return nil // возвращаем существующий инвайт
+			}
+			// Помечаем как просроченный
+			existingInvite.Status = models.InviteStatusExpired
+			if err := tx.Save(&existingInvite).Error; err != nil {
+				return err
+			}
+		}
+
+		// Генерация токена и создание нового инвайта
+		token, err := s.generateToken()
+		if err != nil {
+			return err
+		}
+
+		newInvite := &models.Invite{
+			Email:     email,
+			Token:     token,
+			Status:    models.InviteStatusPending,
+			ExpiresAt: time.Now().Add(s.config.Invite.ExpiresIn),
+		}
+
+		if err := tx.Create(newInvite).Error; err != nil {
+			return err
+		}
+
+		invite = newInvite
+		return nil
+	})
+
 	if err != nil {
-		return nil, err
-	}
-
-	invite := &models.Invite{
-		Email:     email,
-		Token:     token,
-		Status:    models.InviteStatusPending,
-		ExpiresAt: time.Now().Add(s.config.Invite.ExpiresIn),
-	}
-
-	if err := s.db.Create(invite).Error; err != nil {
 		return nil, err
 	}
 

@@ -38,3 +38,7 @@ export const Caption: FC<Props> = ({ children, className }) => {
 export const Label: FC<Props> = ({ children, className }) => {
 	return <span className={cn(styles.label, className)}>{children}</span>;
 };
+
+export const Body: FC<Props> = ({ children, className }) => {
+	return <body className={cn(styles.body, className)}>{children}</body>;
+};

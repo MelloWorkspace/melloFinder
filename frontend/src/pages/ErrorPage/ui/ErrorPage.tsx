@@ -34,7 +34,8 @@ const ErrorPage: FC<Props> = ({ error }) => {
 		<div className={cn(styles.pageErrorWrapper)}>
 			<div className={cn(styles.pageErrorContent)}>
 				<p className={cn(styles.pageErrorTitle)}>
-					{t("exceptions.just-error")}
+					{/*{t("exceptions.just-error")}*/}
+					Ошибка
 				</p>
 
 				{error && (
@@ -46,7 +47,8 @@ const ErrorPage: FC<Props> = ({ error }) => {
 							}}
 						>
 							<AccordionSummary expandIcon={<ExpandMoreIcon />}>
-								{t("exceptions.details")}
+								{/*{t("exceptions.details")}*/}
+								Что то пошло не так ;(
 							</AccordionSummary>
 							<AccordionDetails>
 								<pre className={cn(styles.errorStack)}>
@@ -58,7 +60,8 @@ const ErrorPage: FC<Props> = ({ error }) => {
 									variant="outlined"
 									onClick={copyError}
 								>
-									{t("buttons.copy-error")}
+									{/*{t("buttons.copy-error")}*/}
+									Скопировать
 								</Button>
 							</AccordionDetails>
 						</Accordion>
@@ -66,7 +69,8 @@ const ErrorPage: FC<Props> = ({ error }) => {
 				)}
 
 				<Button sx={{ mt: 3 }} variant="contained" onClick={reloadPage}>
-					{t("buttons.reload-page")}
+					{/*{t("buttons.reload-page")}*/}
+					Обновить страницу
 				</Button>
 			</div>
 		</div>

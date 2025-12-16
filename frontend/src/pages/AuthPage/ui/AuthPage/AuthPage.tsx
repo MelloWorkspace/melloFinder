@@ -3,7 +3,7 @@ import type { FC } from "react";
 import { LogoIcon } from "../../../../shared/assets";
 import { ROUTES } from "../../../../shared/constants";
 import { LoginForm } from "../LoginForm/LoginForm";
-import { SignUpForm } from "../SignUpForm/SignUpForm";
+import SignUpForm from "../SignUpForm/SignUpForm";
 
 import styles from "./AuthPage.module.scss";
 
@@ -26,7 +26,7 @@ const AuthPage: FC = () => {
 		<div className={styles.wrap}>
 			<main className={styles.main}>
 				<Form className={styles.authCard} />
-				<div>
+				<div className={styles.rightSide}>
 					<span className={styles.logo}>
 						<LogoIcon />
 					</span>

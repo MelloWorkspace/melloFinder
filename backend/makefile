@@ -114,7 +114,7 @@ migrate-create-gorm:
 migrate-status:
 	go run cmd/migrate/main.go status
 
-# Atlas миграции
+# Atlas миграции (не используются!)
 atlas-diff:
 	atlas migrate diff --env dev
 
@@ -128,3 +128,7 @@ atlas-status:
 migrate-auto:
 	@echo "Running auto migrations (development only)..."
 	go run -tags migrate cmd/server/main.go --migrate-only
+
+## Показать доступные команды
+help:
+	grep -E '^[a-zA-Z_-]+:' Makefile | sed 's/://' | sort

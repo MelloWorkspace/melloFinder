@@ -1,12 +1,13 @@
 package services
 
 import (
-	"errors"
-
 	"backend/src/config"
 	dto "backend/src/dtos"
 	"backend/src/helpers"
 	"backend/src/models"
+	"errors"
+	"fmt"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -16,14 +17,16 @@ type AuthService struct {
 	config        *config.Config
 	userService   *UserService
 	inviteService *InviteService
+	emailService  *EmailService
 }
 
-func NewAuthService(db *gorm.DB, config *config.Config, userService *UserService, inviteService *InviteService) *AuthService {
+func NewAuthService(db *gorm.DB, config *config.Config, userService *UserService, inviteService *InviteService, emailService *EmailService) *AuthService {
 	return &AuthService{
 		db:            db,
 		config:        config,
 		userService:   userService,
 		inviteService: inviteService,
+		emailService:  emailService,
 	}
 }
 
@@ -33,11 +36,20 @@ func (s *AuthService) SendInvite(email string) (*dto.InviteResponse, error) {
 		return nil, err
 	}
 
-	// Here you would send email with invite token
-	// For now, we just return the token
+	// Отправляем email с приглашением
+	if err := s.emailService.SendInviteEmail(email, invite.Token); err != nil {
+		log.Printf("Failed to send invite email to %s: %v", email, err)
+		
+		// Помечаем инвайт как failed (вместо удаления)
+		if markErr := s.inviteService.MarkInviteAsFailed(invite.ID.String()); markErr != nil {
+			log.Printf("Failed to mark invite as failed: %v", markErr)
+		}
+		
+		return nil, fmt.Errorf("failed to send invite email: %w", err)
+	}
+
 	return &dto.InviteResponse{
 		Message: "Invite sent successfully",
-		Token:   invite.Token,
 	}, nil
 }
 
@@ -65,6 +77,19 @@ func (s *AuthService) AcceptInvite(req *dto.AcceptInviteRequest) (*dto.AuthRespo
 		return nil, err
 	}
 
+	// Отправляем приветственный email
+	go func() {
+		welcomeSubject := "Добро пожаловать!"
+		welcomeBody := `
+		<h2>Добро пожаловать в нашу систему!</h2>
+		<p>Ваша регистрация успешно завершена.</p>
+		<p>Вы можете войти в систему, используя ваш email и пароль.</p>
+		`
+		if err := s.emailService.SendEmail(user.Email, welcomeSubject, welcomeBody, true); err != nil {
+			log.Printf("Failed to send welcome email to %s: %v", user.Email, err)
+		}
+	}()
+
 	// Generate JWT
 	token, err := helpers.GenerateJWT(user.ID, user.Email, s.config.JWT.Secret, s.config.JWT.ExpiresIn)
 	if err != nil {
@@ -85,6 +110,12 @@ func (s *AuthService) AcceptInvite(req *dto.AcceptInviteRequest) (*dto.AuthRespo
 		Token: token,
 		User:  userDTO,
 	}, nil
+}
+
+func (s *InviteService) MarkInviteAsFailed(id string) error {
+	return s.db.Model(&models.Invite{}).
+		Where("id = ?", id).
+		Update("status", "failed").Error
 }
 
 func (s *AuthService) Login(req *dto.LoginRequest) (*dto.AuthResponse, error) {

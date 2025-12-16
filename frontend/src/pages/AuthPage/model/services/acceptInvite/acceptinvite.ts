@@ -1,15 +1,14 @@
-// FIXME
 import { $api } from "../../../../../shared/api";
-import { AuthResponse, LoginParameters } from "../../types/types";
+import { AcceptInviteParameters, AuthResponse } from "../../types/types";
 
-export const login = async (
-	parameters: LoginParameters
+export const acceptInvite = async (
+	parameters: AcceptInviteParameters
 ): Promise<AuthResponse> => {
 	const response = await $api.post<{
 		data: AuthResponse;
 		message: string;
 		success: boolean;
-	}>("/auth/login", parameters);
+	}>("/auth/accept-invite", parameters);
 
 	return response.data.data;
 };

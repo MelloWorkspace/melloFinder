@@ -6,10 +6,15 @@ import (
 	"backend/src/middlewares"
 
 	"github.com/labstack/echo/v4"
-	"github.com/swaggo/echo-swagger"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
-func Setup(e *echo.Echo, config *config.Config, authController *controllers.AuthController, userController *controllers.UserController) {
+type RouteControllers struct {
+	Auth *controllers.AuthController
+	User *controllers.UserController
+}
+
+func Setup(e *echo.Echo, config *config.Config, ctrls *RouteControllers) {
 	// Middlewares
 	e.Use(middlewares.CORS())
 
@@ -26,9 +31,9 @@ func Setup(e *echo.Echo, config *config.Config, authController *controllers.Auth
 
 	// Auth routes
 	auth := api.Group("/auth")
-	auth.POST("/invite", authController.SendInvite)
-	auth.POST("/accept-invite", authController.AcceptInvite)
-	auth.POST("/login", authController.Login)
+	auth.POST("/invite", ctrls.Auth.SendInvite)
+	auth.POST("/accept-invite", ctrls.Auth.AcceptInvite)
+	auth.POST("/login", ctrls.Auth.Login)
 
 	// Protected routes
 	protected := api.Group("")
@@ -36,6 +41,6 @@ func Setup(e *echo.Echo, config *config.Config, authController *controllers.Auth
 
 	// User routes
 	users := protected.Group("/users")
-	users.GET("/profile", userController.GetProfile)
-	users.GET("", userController.GetAllUsers)
+	users.GET("/profile", ctrls.User.GetProfile)
+	users.GET("", ctrls.User.GetAllUsers)
 }
